@@ -1,0 +1,60 @@
+media:
+  input: media
+  output: /cosmic-atelier/media
+content:
+  - name: site
+    label: 首頁文字設定
+    type: file
+    path: data/site.json
+    format: json
+    operations:
+      delete: false
+    fields:
+      - name: eyebrow
+        label: 首頁小標題
+        type: string
+      - name: intro
+        label: 首頁介紹
+        type: text
+      - name: library_intro
+        label: 天文文獻區說明
+        type: text
+      - name: about_intro
+        label: 關於本站說明
+        type: text
+  - name: sources
+    label: 天文期刊與來源
+    type: file
+    path: data/sources.json
+    format: json
+    list: true
+    operations:
+      delete: false
+    fields:
+      - name: title
+        label: 來源名稱
+        type: string
+        required: true
+      - name: type
+        label: 類別
+        type: select
+        options:
+          values:
+            - name: journal
+              label: 學術期刊
+            - name: preprint
+              label: 預印本
+            - name: news
+              label: 天文通訊
+      - name: label
+        label: 英文標籤
+        type: string
+      - name: desc
+        label: 來源介紹
+        type: text
+      - name: url
+        label: 來源網址（https://）
+        type: string
+settings:
+  content:
+    merge: true
