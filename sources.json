@@ -1,0 +1,65 @@
+[
+  {
+    "title": "The Astrophysical Journal (ApJ)",
+    "type": "journal",
+    "label": "PEER-REVIEWED JOURNAL",
+    "desc": "美國天文學會的天文物理研究期刊，涵蓋觀測、理論與新發現。",
+    "url": "https://journals.aas.org/astrophysical-journal/"
+  },
+  {
+    "title": "The Astronomical Journal (AJ)",
+    "type": "journal",
+    "label": "PEER-REVIEWED JOURNAL",
+    "desc": "重視天文觀測、巡天、儀器、資料分析與天文軟體。",
+    "url": "https://journals.aas.org/astronomical-journal/"
+  },
+  {
+    "title": "ApJ Letters (ApJL)",
+    "type": "journal",
+    "label": "RAPID RESEARCH",
+    "desc": "快速刊登具高度影響力的重要天文研究成果。",
+    "url": "https://journals.aas.org/"
+  },
+  {
+    "title": "ApJ Supplement (ApJS)",
+    "type": "journal",
+    "label": "DATA & CATALOGS",
+    "desc": "星表、大型資料集、完整研究與詳細觀測結果的資料寶庫。",
+    "url": "https://journals.aas.org/"
+  },
+  {
+    "title": "arXiv astro-ph",
+    "type": "preprint",
+    "label": "RESEARCH PREPRINTS",
+    "desc": "每日上架的天文與天文物理預印本；部分文章尚未經同儕審查。",
+    "url": "https://arxiv.org/archive/astro-ph"
+  },
+  {
+    "title": "NASA News & RSS",
+    "type": "news",
+    "label": "NEWS / RSS",
+    "desc": "NASA 官方消息與 RSS 入口，適合追蹤任務和最新太空探索消息。",
+    "url": "https://www.nasa.gov/rss-feeds/"
+  },
+  {
+    "title": "AAS Nova",
+    "type": "news",
+    "label": "RESEARCH HIGHLIGHTS",
+    "desc": "以較容易閱讀的方式介紹近期天文學研究和學術亮點。",
+    "url": "https://aasnova.org/"
+  },
+  {
+    "title": "Astrobites",
+    "type": "news",
+    "label": "RESEARCH DIGEST",
+    "desc": "由年輕研究者撰寫的天文論文導讀，適合跟進研究主題。",
+    "url": "https://astrobites.org/"
+  },
+  {
+    "title": "ESA Science",
+    "type": "news",
+    "label": "SPACE SCIENCE",
+    "desc": "歐洲太空總署的科學任務與太空探索新聞入口。",
+    "url": "https://www.esa.int/Science_Exploration/Space_Science"
+  }
+]
