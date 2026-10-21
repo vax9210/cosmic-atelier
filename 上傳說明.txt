@@ -1,0 +1,13 @@
+Cosmic Atelier SEO 優化包 — 僅上傳 index.html、sitemap.xml、robots.txt 及 guides 資料夾。
+
+注意：請不要刪除或覆蓋 .pages.yml、data/site.json、data/sources.json、Google 驗證 HTML。
+
+建議在 GitHub 新建分支備份原版，或先下載現有 index.html。
+
+網頁版 GitHub 上傳請確認 guides/galaxy-cluster/index.html 與 guides/astronomy-journals/index.html 保持正確資料夾路徑；若無法直接上傳整個資料夾，可透過 Add file → Create new file 輸入完整路徑後貼上檔案內容，或使用 GitHub Desktop。
+
+不要把 ZIP 直接上傳到 GitHub。
+
+本版包含：中文 SEO 標題、說明、canonical、Open Graph、WebSite 結構化資料、兩篇獨立文章、內部連結、Sitemap、robot.txt，以及互不影響的 Pages CMS 資料讀取。
+
+文章為科普基礎草稿，尚未附上你的個人觀測照片；建議逐步補上個人實測、原創照片與具體引用。

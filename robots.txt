@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /cosmic-atelier/
+Sitemap: https://vax9210.github.io/cosmic-atelier/sitemap.xml
