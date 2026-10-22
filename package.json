@@ -1,0 +1,8 @@
+{
+  "name":"cosmic-atelier-site",
+  "private":true,
+  "version":"2.0.0",
+  "type":"module",
+  "scripts":{"build":"node scripts/sync-assets.mjs && astro build && node scripts/make-sitemap.mjs"},
+  "dependencies":{"astro":"^5.16.0"}
+}

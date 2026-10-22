@@ -55,6 +55,52 @@ content:
       - name: url
         label: 來源網址（https://）
         type: string
+  - name: articles
+    label: 天文文章管理
+    type: collection
+    path: src/content/articles
+    format: yaml-frontmatter
+    filename: "{primary}.md"
+    view:
+      primary: title
+      fields: [title, category, date, draft]
+      sort: date
+      order: desc
+    fields:
+      - name: title
+        label: 文章標題
+        type: string
+        required: true
+      - name: description
+        label: 搜尋摘要（建議 70 至 150 字）
+        type: text
+        required: true
+      - name: category
+        label: 文章分類
+        type: select
+        options:
+          values:
+            - name: deep-sky
+              label: 深空觀測
+            - name: research
+              label: 天文研究
+            - name: equipment
+              label: 器材教學
+            - name: basics
+              label: 天文知識
+      - name: date
+        label: 發布日期
+        type: date
+      - name: draft
+        label: 草稿（開啟時不公開）
+        type: boolean
+        default: true
+      - name: cover
+        label: 封面圖片（可不填）
+        type: image
+      - name: body
+        label: 文章正文
+        type: rich-text
 settings:
   content:
     merge: true
