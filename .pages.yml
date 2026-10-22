@@ -60,7 +60,9 @@ content:
     type: collection
     path: src/content/articles
     format: yaml-frontmatter
-    filename: "{primary}.md"
+  filename:
+    template: "{primary}.md"
+    field: create
     view:
       primary: title
       fields: [title, category, date, draft]
