@@ -1,0 +1,10 @@
+---
+import ArticleLayout from '../../layouts/ArticleLayout.astro';
+export async function getStaticPaths(){
+ const posts=await Astro.glob('../../content/articles/*.md');
+ return posts.filter(p=>!p.frontmatter.draft).map(p=>({params:{slug:p.file.split('/').pop().replace(/\.md$/,'')},props:{post:p}}));
+}
+const {post}=Astro.props;
+const {Content}=post;
+---
+<ArticleLayout title={post.frontmatter.title} description={post.frontmatter.description} category={post.frontmatter.category} date={post.frontmatter.date} cover={post.frontmatter.cover}><Content/></ArticleLayout>
