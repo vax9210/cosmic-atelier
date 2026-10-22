@@ -55,7 +55,7 @@ content:
       - name: url
         label: 來源網址（https://）
         type: string
-    - name: articles
+  - name: articles
     label: 天文文章管理
     type: collection
     path: src/content/articles
