@@ -67,21 +67,36 @@ content:
     type: collection
     path: src/content/articles
     format: yaml-frontmatter
-    filename: "{primary}.md"
+
+    # 使用獨立 slug 產生 Markdown 檔名
+    filename:
+      template: "{fields.slug}.md"
+      field: false
+
     view:
       primary: title
       fields: [title, category, date, draft]
       sort: date
       order: desc
+
     fields:
       - name: title
         label: 文章標題
         type: string
         required: true
+
+      - name: slug
+        label: 文章網址代碼（英文）
+        type: string
+        required: true
+        description: "例如 perseus-cluster-2026，請勿重複"
+        pattern: "^[a-z0-9]+(-[a-z0-9]+)*$"
+
       - name: description
         label: 搜尋摘要（建議 70 至 150 字）
         type: text
         required: true
+
       - name: category
         label: 文章分類
         type: select
@@ -95,16 +110,20 @@ content:
               label: 器材教學
             - name: basics
               label: 天文知識
+
       - name: date
         label: 發布日期
         type: date
+
       - name: draft
         label: 草稿（開啟時不公開）
         type: boolean
         default: true
+
       - name: cover
         label: 封面圖片（可不填）
         type: image
+
       - name: body
         label: 文章正文
         type: rich-text
