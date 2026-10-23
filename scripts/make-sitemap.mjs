@@ -11,6 +11,15 @@ for(const file of await readdir('src/content/articles')) {
  const slug=file.replace(/\.md$/,'');
  if(existsSync(`dist/articles/${slug}/index.html`))urls.push(base+`articles/${slug}/`);
 }
+if(existsSync('dist/gallery/index.html')) urls.push(base+'gallery/');
+if(existsSync('src/content/gallery')) for(const file of await readdir('src/content/gallery')) {
+ if(!file.endsWith('.md')) continue;
+ const content=await readFile('src/content/gallery/'+file,'utf8');
+ const fm=content.split('---').slice(1,2)[0]??'';
+ if(/^draft:\s*true\s*$/mi.test(fm)) continue;
+ const slug=file.replace(/\.md$/,'');
+ if(existsSync(`dist/gallery/${slug}/index.html`)) urls.push(base+`gallery/${slug}/`);
+}
 const escape=x=>x.replaceAll('&','&amp;').replaceAll('<','&lt;');
 await writeFile('dist/sitemap.xml',`<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.map(x=>`  <url><loc>${escape(x)}</loc></url>`).join('\n')}\n</urlset>\n`);
 await writeFile('dist/robots.txt','User-agent: *\nAllow: /\nSitemap: '+base+'sitemap.xml\n');
