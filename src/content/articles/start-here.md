@@ -3,7 +3,8 @@ title: 第一篇天文文章（草稿範例）
 description: 這是 Pages CMS 文章編輯示範，請改寫成自己的原創文章後再發布。
 category: basics
 date: 2026-10-21
-draft: false
+draft: true
+slug: "33"
 ---
 ## 開始撰寫
 
