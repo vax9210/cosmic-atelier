@@ -1,0 +1,48 @@
+
+name: Test Cosmic Atelier Build
+
+on:
+  push:
+    branches:
+      - cosmic-upgrade-test
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+
+      - name: Build Astro website
+        run: npm run build
+
+      - name: Check generated pages
+        shell: bash
+        run: |
+          test -f dist/index.html
+          test -f dist/articles/index.html
+          test -f dist/gallery/index.html
+          test -f dist/apod/index.html
+          test -f dist/research/index.html
+          echo "All essential pages generated successfully."
+
+      - name: Upload test result
+        uses: actions/upload-artifact@v4
+        with:
+          name: cosmic-test-site
+          path: dist/
