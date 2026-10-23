@@ -1,0 +1,6 @@
+---
+import { jsonLD } from '../lib/site.js';
+const { title, description } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+---
+<meta property="og:type" content="website"/><meta property="og:title" content={title}/><meta property="og:description" content={description}/><meta property="og:url" content={canonical}/><meta name="twitter:card" content="summary"/><script type="application/ld+json" set:html={jsonLD({'@context':'https://schema.org','@type':'CollectionPage',name:title,description,url:canonical,inLanguage:'zh-Hant'})}/>

@@ -1,14 +1,16 @@
 ---
-const works = (await Astro.glob('../../content/gallery/*.md'))
- .filter(p=>p.frontmatter.draft === false && p.frontmatter.photo)
- .sort((a,b)=>String(b.frontmatter.observed_at??'').localeCompare(String(a.frontmatter.observed_at??'')));
+import { dateISO, publishedPhoto, slugOf } from '../../lib/site.js';
+import CollectionSEO from '../../components/CollectionSEO.astro';
+import Photo from '../../components/Photo.astro';
+const works = (Object.values(import.meta.glob('../../content/gallery/*.md', { eager: true })))
+ .filter(publishedPhoto)
+ .sort((a,b)=>dateISO(b.frontmatter.observed_at).localeCompare(dateISO(a.frontmatter.observed_at)));
 const root='/cosmic-atelier';
-const normalImage = (s) => !s ? '' : (/^https?:\/\//.test(String(s)) || String(s).startsWith('/') ? String(s) : `${root}/${String(s).replace(/^\/+/, '')}`);
 ---
 <!doctype html><html lang="zh-Hant"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>深空天文攝影作品集｜Cosmic Atelier</title><meta name="description" content="Cosmic Atelier 原創天文攝影作品集，收錄星系、星雲、星團與觀測設備、曝光資訊及拍攝心得。"/>
 <link rel="canonical" href="https://vax9210.github.io/cosmic-atelier/gallery/"/>
-<style>body{background:#070b17;color:#f1f5ff;margin:0;font:16px/1.7 system-ui,sans-serif}main{max-width:1150px;margin:0 auto;padding:32px 20px}a{color:#96dcf2}h1{font-size:clamp(2rem,5vw,3.5rem);margin-bottom:4px}.sub{color:#afc0d9}.items{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:22px;margin:30px 0}.item{background:#11192b;border:1px solid #30405f;border-radius:19px;overflow:hidden}.item img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block}.item .body{padding:15px 18px}.item h2{font-size:1.2rem;margin:0}.item p{color:#b4c4de;margin:8px 0}.placeholder{height:150px;display:grid;place-items:center;border:1px dashed #45607a;border-radius:16px;color:#b4c4de}</style></head>
+<style>body{background:#070b17;color:#f1f5ff;margin:0;font:16px/1.7 system-ui,sans-serif}main{max-width:1150px;margin:0 auto;padding:32px 20px}a{color:#96dcf2}h1{font-size:clamp(2rem,5vw,3.5rem);margin-bottom:4px}.sub{color:#afc0d9}.items{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:22px;margin:30px 0}.item{background:#11192b;border:1px solid #30405f;border-radius:19px;overflow:hidden}.item :global(img){width:100%;aspect-ratio:4/3;object-fit:cover;display:block}.item .body{padding:15px 18px}.item h2{font-size:1.2rem;margin:0}.item p{color:#b4c4de;margin:8px 0}.placeholder{height:150px;display:grid;place-items:center;border:1px dashed #45607a;border-radius:16px;color:#b4c4de}</style><CollectionSEO title="深空天文攝影作品集" description="Cosmic Atelier 原創天文觀測、攝影與科學探索。"/></head>
 <body><main><a href="/cosmic-atelier/">✦ 返回 Cosmic Atelier 首頁</a><h1>深空天文攝影作品集</h1><p class="sub">以影像記錄宇宙，從實際觀測走向天文科學。</p>
-{works.length===0?<div class="placeholder">第一件攝影作品尚未發布。可從 Pages CMS 新增作品。</div>:<div class="items">{works.map(p=><article class="item"><a href={`${root}/gallery/${p.file.split('/').pop().replace(/\.md$/,'')}/`}><img loading="lazy" src={normalImage(p.frontmatter.photo)} alt={`${p.frontmatter.object_name || p.frontmatter.title} 天文攝影`}/></a><div class="body"><h2><a href={`${root}/gallery/${p.file.split('/').pop().replace(/\.md$/,'')}/`}>{p.frontmatter.title}</a></h2><p>{p.frontmatter.object_name} · {String(p.frontmatter.observed_at??'').slice(0,10)}</p><p>{p.frontmatter.description}</p></div></article>)}</div>}
+{works.length===0?<div class="placeholder">第一件攝影作品尚未發布。可從 Pages CMS 新增作品。</div>:<div class="items">{works.map(p=><article class="item"><a href={`${root}/gallery/${slugOf(p)}/`}><Photo src={p.frontmatter.photo} alt={`${p.frontmatter.object_name || p.frontmatter.title} 天文攝影`}/></a><div class="body"><h2><a href={`${root}/gallery/${slugOf(p)}/`}>{p.frontmatter.title}</a></h2><p>{p.frontmatter.object_name} · {dateISO(p.frontmatter.observed_at)}</p><p>{p.frontmatter.description}</p></div></article>)}</div>}
 </main></body></html>

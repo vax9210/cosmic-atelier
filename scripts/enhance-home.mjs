@@ -1,0 +1,11 @@
+import {readFile,writeFile} from 'node:fs/promises';
+import {imageURL} from '../src/lib/site.js';
+const esc=s=>String(s||'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;');
+const entries=JSON.parse(await readFile('dist/search-index.json','utf8'));
+const cards=type=>entries.filter(p=>p.type===type).sort((a,b)=>b.date.localeCompare(a.date)).slice(0,3).map(p=>`<article class="glass latest-card">${p.image?`<a href="${esc(p.url)}"><img src="${esc(imageURL(p.image))}" alt="${esc(p.title)}" loading="lazy" decoding="async" width="640" height="480"></a>`:''}<div><p class="tag">${esc(p.date.slice(0,10))}</p><h3><a href="${esc(p.url)}">${esc(p.title)}</a></h3><p>${esc(p.description)}</p></div></article>`).join('')||'<p>新內容正在準備中，歡迎稍後再來探索。</p>';
+let html=await readFile('dist/index.html','utf8');
+const section=`<section id="latest"><div class="sectionhead"><div class="eyebrow">LATEST / 最新探索</div><h2>宇宙探索新紀錄。</h2></div><h3>最新文章</h3><div class="cards">${cards('articles')}</div><h3>最新攝影作品</h3><div class="cards">${cards('gallery')}</div><div class="actions"><a class="btn" href="/cosmic-atelier/apod/">NASA 每日天文精選 ↗</a><a class="btn" href="/cosmic-atelier/research/">arXiv 國際研究 ↗</a><a class="btn primary" href="/cosmic-atelier/search/">搜尋文章・攝影・研究 ↗</a></div></section>`;
+html=html.replace('<section id="discover"',section+'<section id="discover"');
+html=html.replace('</style>','.latest-card img{display:block;width:100%;height:auto;aspect-ratio:4/3;object-fit:cover}.latest-card>div{padding:24px}.latest-card p{color:var(--muted);line-height:1.8}.latest-card h3 a:hover{color:var(--cyan)}:focus-visible{outline:2px solid var(--cyan);outline-offset:4px}</style>');
+html=html.replace('<a href="#about">關於本站</a>','<a href="/cosmic-atelier/search/">全站搜尋</a><a href="/cosmic-atelier/apod/">每日精選</a><a href="/cosmic-atelier/research/">最新研究</a><a href="#about">關於本站</a>');
+await writeFile('dist/index.html',html);console.log('Homepage latest content generated');

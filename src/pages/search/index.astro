@@ -1,0 +1,25 @@
+---
+import Layout from '../../layouts/SectionLayout.astro';
+---
+<Layout noindex title="搜尋宇宙資料庫" description="搜尋已公開文章、攝影作品及快取中的 arXiv 研究書目。">
+<form role="search"><label for="query">關鍵字</label><input id="query" name="q" type="search" placeholder="天體、設備、標題、作者…"/><label for="kind">類型</label><select id="kind"><option value="all">全部</option><option value="articles">文章</option><option value="gallery">攝影</option><option value="research">研究</option></select></form>
+<p id="status" role="status">正在載入搜尋索引…</p><div id="results" class="grid"></div><noscript>搜尋需要 JavaScript；你仍可從上方導覽瀏覽所有專區。</noscript>
+<script>
+import { base } from '../../lib/site.js';
+const query = document.querySelector<HTMLInputElement>('#query')!;
+const kind = document.querySelector<HTMLSelectElement>('#kind')!;
+const status = document.querySelector('#status')!;
+const results = document.querySelector('#results')!;
+let entries: any[] = [];
+query.value = new URLSearchParams(location.search).get('q') || '';
+function render() {
+ const words = query.value.normalize('NFKC').toLocaleLowerCase().trim().split(/\s+/).filter(Boolean);
+ const matches = entries.filter(p => (kind.value === 'all' || p.type === kind.value) && words.every(w => [p.title,p.description,p.text].join(' ').normalize('NFKC').toLocaleLowerCase().includes(w)));
+ results.replaceChildren(); status.textContent = `找到 ${matches.length} 筆資料`;
+ for (const p of matches.slice(0,100)) { const article=document.createElement('article'); article.className='card'; const h=document.createElement('h2'); const a=document.createElement('a'); a.href=p.url; a.textContent=p.title; h.append(a); const desc=document.createElement('p');desc.textContent=p.description; article.append(h,desc);results.append(article); }
+ if(matches.length>100) status.textContent += '，顯示前 100 筆，請縮小搜尋範圍';
+ const url = new URL(location.href); query.value ? url.searchParams.set('q',query.value) : url.searchParams.delete('q'); history.replaceState(null,'',url);
+}
+document.querySelector('form')!.addEventListener('submit',e=>e.preventDefault());query.addEventListener('input',render);kind.addEventListener('change',render);
+fetch(`${base}search-index.json`).then(r=>{if(!r.ok)throw Error();return r.json()}).then(data=>{entries=data;render()}).catch(()=>{status.textContent='搜尋索引暫時無法載入，請重新整理或使用上方導覽。'});
+</script></Layout>

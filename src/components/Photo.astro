@@ -1,0 +1,9 @@
+---
+import { Image } from 'astro:assets';
+import { imageURL } from '../lib/site.js';
+const { src, alt, eager = false } = Astro.props;
+const assets = import.meta.glob('/media/**/*.{png,jpg,jpeg,webp}', { eager: true, import: 'default' });
+const path = imageURL(src);
+const asset = assets[path.replace('/cosmic-atelier/', '/')];
+---
+{asset ? <Image src={asset} alt={alt} widths={[...new Set([320,640,960,1440].map(w=>Math.min(w,asset.width)))]} sizes="(max-width: 600px) 100vw, (max-width: 1000px) 50vw, 800px" format="webp" loading={eager?'eager':'lazy'} decoding="async" fetchpriority={eager?'high':'auto'}/> : <img src={path} alt={alt} loading={eager?'eager':'lazy'} decoding="async"/>}

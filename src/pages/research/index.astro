@@ -1,0 +1,10 @@
+---
+import Layout from '../../layouts/SectionLayout.astro';
+import { loadFeed } from '../../lib/feed-data.js';
+const data = await loadFeed('research');
+---
+<Layout title="國際天文研究 · arXiv" description="追蹤 astro-ph 天文物理預印本，提供原始標題、作者、分類及論文連結。">
+<p>最後成功更新：{data.updatedAt || '尚未取得資料'}。預印本不代表已通過同儕審查；研究結論請以原文及後續期刊版本為準。</p>
+<div class="grid">{data.items.map(item => <article class="card"><p>{item.date} · {item.categories.join(' / ')}</p><h2><a href={item.url}>{item.title} ↗</a></h2><p>{item.authors.join(', ')}</p><p class="muted">arXiv 預印本 · 原文為英文</p></article>)}</div>
+{!data.items.length && <p>尚無可用快取。<a href="https://arxiv.org/list/astro-ph/recent">瀏覽 arXiv 最新天文論文 ↗</a></p>}
+</Layout>

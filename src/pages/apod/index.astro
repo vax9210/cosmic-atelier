@@ -1,0 +1,10 @@
+---
+import Layout from '../../layouts/SectionLayout.astro';
+import { loadFeed } from '../../lib/feed-data.js';
+const data = await loadFeed('apod');
+---
+<Layout title="NASA APOD 每日天文精選" description="前往 NASA 閱讀每日天文影像與科學解說；本區僅提供書目資訊與原始來源。">
+<p>最後成功更新：{data.updatedAt || '尚未取得資料'}。資料為定期快取，可能晚於 NASA 最新發布。</p>
+<p>圖片及解說可能受版權保護。本站不嵌入圖片、影片，也不轉載英文解說或中文翻譯全文。</p>
+{data.items.length ? data.items.map(item => <article class="card"><p>{item.date} · {item.mediaType}</p><h2><a href={item.url} rel="noopener noreferrer">{item.title} ↗</a></h2><p>來源／版權：{item.credit}</p><p>影像授權請以 NASA 原始頁面所列資訊為準。</p></article>) : <div class="card"><p>目前尚無可用快取，仍可直接閱讀 NASA 每日精選。</p><a href="https://science.nasa.gov/apod/">前往 NASA APOD ↗</a></div>}
+</Layout>
