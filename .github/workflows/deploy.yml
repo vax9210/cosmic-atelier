@@ -3,6 +3,8 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+  schedule:
+    - cron: '23 8 * * *'
 permissions:
   contents: read
   pages: write
@@ -22,6 +24,18 @@ jobs:
         with:
           node-version: '22'
       - run: npm install --no-audit --no-fund
+      - run: npm test
+      - uses: actions/cache@v4
+        with:
+          path: |
+            data/apod.json
+            data/research.json
+          key: astronomy-metadata-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: astronomy-metadata-
+      - name: Refresh astronomy metadata (retain cache on API failure)
+        run: npm run update:feeds
+        env:
+          NASA_API_KEY: ${{ secrets.NASA_API_KEY }}
       - run: npm run build
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
