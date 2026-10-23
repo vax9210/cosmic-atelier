@@ -1,18 +1,19 @@
 ---
+import { dateISO, publishedPhoto, slugOf, imageURL, jsonLD } from '../../lib/site.js';
+import Photo from '../../components/Photo.astro';
 export async function getStaticPaths(){
- const photos = await Astro.glob('../../content/gallery/*.md');
- return photos.filter(p=>p.frontmatter.draft === false && p.frontmatter.photo)
-  .map(p=>({params:{slug:p.file.split('/').pop().replace(/\.md$/,'')},props:{work:p}}));
+ const photos = Object.values(import.meta.glob('../../content/gallery/*.md', { eager: true }));
+ return photos.filter(publishedPhoto)
+  .map(p=>({params:{slug:slugOf(p)},props:{work:p}}));
 }
 const {work}=Astro.props;
 const {Content}=work;
 const d=work.frontmatter;
-const root='/cosmic-atelier';
-const photo=!d.photo?'':(/^https?:\/\//.test(String(d.photo))||String(d.photo).startsWith('/')?String(d.photo):`${root}/${String(d.photo).replace(/^\/+/, '')}`);
-const canonical=`https://vax9210.github.io/cosmic-atelier/gallery/${work.file.split('/').pop().replace(/\.md$/,'')}/`;
+const photo=imageURL(d.photo);
+const canonical=`https://vax9210.github.io/cosmic-atelier/gallery/${slugOf(work)}/`;
 ---
 <!doctype html><html lang="zh-Hant"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>{d.title}｜Cosmic Atelier 天文攝影</title><meta name="description" content={d.description}/><link rel="canonical" href={canonical}/><meta property="og:type" content="article"/><meta property="og:title" content={d.title}/><meta property="og:description" content={d.description}/><meta property="og:url" content={canonical}/><meta property="og:image" content={new URL(photo,'https://vax9210.github.io').href}/>
-<script type="application/ld+json" set:html={JSON.stringify({'@context':'https://schema.org','@type':'ImageObject',name:d.title,description:d.description,contentUrl:new URL(photo,'https://vax9210.github.io').href,creditText:d.credits||undefined,dateCreated:d.observed_at?String(d.observed_at).slice(0,10):undefined})}/>
-<style is:global>body{margin:0;background:#080d1a;color:#eef3ff;font:16px/1.85 system-ui,sans-serif}main{max-width:850px;margin:auto;padding:30px 18px}a{color:#91dff7}h1{font-size:clamp(2rem,5vw,3rem);line-height:1.25}img{width:100%;height:auto;object-fit:contain;border-radius:18px;background:#070b15}dl{display:grid;grid-template-columns:150px 1fr;gap:8px 16px;border:1px solid #2d3c54;border-radius:14px;padding:20px}dt{color:#98a9c7}dd{margin:0}article{margin:30px 0}p{color:#c0cde3}</style></head>
-<body><main><a href="/cosmic-atelier/gallery/">← 返回天文攝影作品集</a><h1>{d.title}</h1><p>{d.description}</p><figure style="margin:0"><img src={photo} alt={`${d.object_name} 的天文攝影作品`} loading="eager"/><figcaption style="color:#a9b8d0">{d.credits || 'Cosmic Atelier 原創觀測紀錄'}</figcaption></figure><h2>觀測資訊</h2><dl><dt>天體</dt><dd>{d.object_name}</dd><dt>觀測日期</dt><dd>{String(d.observed_at??'未記錄').slice(0,10)}</dd><dt>設備</dt><dd>{d.equipment||'未記錄'}</dd><dt>曝光</dt><dd>{d.exposure||'未記錄'}</dd>{d.location&&<><dt>地點</dt><dd>{d.location}</dd></>}</dl><article><Content/></article></main></body></html>
+<script type="application/ld+json" set:html={jsonLD({'@context':'https://schema.org','@type':'ImageObject',name:d.title,description:d.description,contentUrl:new URL(photo,'https://vax9210.github.io').href,creditText:d.credits||undefined,dateCreated:dateISO(d.observed_at)||undefined})}/>
+<style is:global>body{margin:0;background:#080d1a;color:#eef3ff;font:16px/1.85 system-ui,sans-serif}main{max-width:850px;margin:auto;padding:30px 18px}a{color:#91dff7}h1{font-size:clamp(2rem,5vw,3rem);line-height:1.25}img{width:100%;height:auto;object-fit:contain;border-radius:18px;background:#070b15}dl{display:grid;grid-template-columns:minmax(70px,120px) minmax(0,1fr);gap:8px 16px;border:1px solid #2d3c54;border-radius:14px;padding:20px}dt{color:#98a9c7}dd{margin:0;overflow-wrap:anywhere}article{margin:30px 0}p{color:#c0cde3}</style></head>
+<body><main><a href="/cosmic-atelier/gallery/">← 返回天文攝影作品集</a><h1>{d.title}</h1><p>{d.description}</p><figure style="margin:0"><Photo src={d.photo} alt={`${d.object_name} 的天文攝影作品`} eager/><figcaption style="color:#a9b8d0">{d.credits || 'Cosmic Atelier 原創觀測紀錄'}</figcaption></figure><h2>觀測資訊</h2><dl><dt>天體</dt><dd>{d.object_name}</dd><dt>觀測日期</dt><dd>{dateISO(d.observed_at)||'未記錄'}</dd><dt>設備</dt><dd>{d.equipment||'未記錄'}</dd><dt>曝光</dt><dd>{d.exposure||'未記錄'}</dd>{d.location&&<><dt>地點</dt><dd>{d.location}</dd></>}</dl><article><Content/></article></main></body></html>

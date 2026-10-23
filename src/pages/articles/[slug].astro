@@ -1,8 +1,9 @@
 ---
+import { publishedArticle, slugOf } from '../../lib/site.js';
 import ArticleLayout from '../../layouts/ArticleLayout.astro';
 export async function getStaticPaths(){
- const posts=await Astro.glob('../../content/articles/*.md');
- return posts.filter(p=>!p.frontmatter.draft).map(p=>({params:{slug:p.file.split('/').pop().replace(/\.md$/,'')},props:{post:p}}));
+ const posts=Object.values(import.meta.glob('../../content/articles/*.md', { eager: true }));
+ return posts.filter(publishedArticle).map(p=>({params:{slug:slugOf(p)},props:{post:p}}));
 }
 const {post}=Astro.props;
 const {Content}=post;
