@@ -1,12 +1,8 @@
-
 media:
   input: media
   output: /cosmic-atelier/media
 
 content:
-  # ============================
-  # 1. 首頁文字設定
-  # ============================
   - name: site
     label: 首頁文字設定
     type: file
@@ -18,22 +14,16 @@ content:
       - name: eyebrow
         label: 首頁小標題
         type: string
-
       - name: intro
         label: 首頁介紹
         type: text
-
       - name: library_intro
         label: 天文文獻區說明
         type: text
-
       - name: about_intro
         label: 關於本站說明
         type: text
 
-  # ============================
-  # 2. 天文期刊與來源
-  # ============================
   - name: sources
     label: 天文期刊與來源
     type: file
@@ -47,7 +37,6 @@ content:
         label: 來源名稱
         type: string
         required: true
-
       - name: type
         label: 類別
         type: select
@@ -59,60 +48,44 @@ content:
               label: 預印本
             - name: news
               label: 天文通訊
-
       - name: label
         label: 英文標籤
         type: string
-
       - name: desc
         label: 來源介紹
         type: text
-
       - name: url
         label: 來源網址（https://）
         type: string
 
-  # ============================
-  # 3. 天文文章管理
-  # ============================
   - name: articles
     label: 天文文章管理
     type: collection
     path: src/content/articles
     format: yaml-frontmatter
-
-    # 自動產生 UUID 檔名
     filename:
       template: "{fields.id}.md"
       field: false
-
     view:
       primary: title
       fields: [title, category, date, draft]
-      sort: [date, title]
-      default:
-        sort: date
-        order: desc
-
+      sort: date
+      order: desc
     fields:
-      # 自動產生文章識別碼
       - name: id
-        label: 文章識別碼
+        label: 文章唯一識別碼
         type: uuid
         hidden: true
         options:
           editable: false
-
       - name: title
         label: 文章標題
         type: string
         required: true
-
       - name: description
-        label: 搜尋摘要（建議 70 至 150 字）
+        label: 搜尋摘要
         type: text
         required: true
-
       - name: category
         label: 文章分類
         type: select
@@ -126,22 +99,77 @@ content:
               label: 器材教學
             - name: basics
               label: 天文知識
-
       - name: date
         label: 發布日期
         type: date
-
       - name: draft
         label: 草稿（開啟時不公開）
         type: boolean
         default: true
-
       - name: cover
-        label: 封面圖片（可不填）
+        label: 封面圖片
         type: image
-
       - name: body
         label: 文章正文
+        type: rich-text
+
+  - name: gallery
+    label: 天文攝影作品
+    type: collection
+    path: src/content/gallery
+    format: yaml-frontmatter
+    filename:
+      template: "{fields.id}.md"
+      field: false
+    view:
+      primary: title
+      fields: [object_name, observed_at, draft]
+      sort: observed_at
+      order: desc
+    fields:
+      - name: id
+        label: 作品唯一識別碼（自動）
+        type: uuid
+        hidden: true
+        options:
+          editable: false
+      - name: title
+        label: 作品標題
+        type: string
+        required: true
+      - name: object_name
+        label: 天體名稱或編號
+        type: string
+        required: true
+      - name: description
+        label: 作品簡介與 SEO 摘要
+        type: text
+        required: true
+      - name: photo
+        label: 主要天文照片
+        type: image
+        required: true
+      - name: observed_at
+        label: 觀測日期
+        type: date
+      - name: equipment
+        label: 觀測設備（例如 Seestar S30 Pro）
+        type: string
+      - name: exposure
+        label: 曝光資訊（例如 10 秒 × 120 張）
+        type: string
+      - name: location
+        label: 觀測地點（可不填）
+        type: string
+      - name: credits
+        label: 影像來源與版權說明
+        type: string
+      - name: draft
+        label: 草稿（開啟時不公開）
+        type: boolean
+        default: true
+      - name: body
+        label: 觀測心得與科學說明
         type: rich-text
 
 settings:
